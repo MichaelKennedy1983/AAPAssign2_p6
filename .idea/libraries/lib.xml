@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/BankDB5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DBPop.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/derby.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/DBPop.jar!/" />
+    </SOURCES>
+  </library>
+</component>
