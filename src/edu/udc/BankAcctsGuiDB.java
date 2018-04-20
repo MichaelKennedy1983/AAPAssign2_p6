@@ -1,9 +1,7 @@
 package edu.udc;
 
-import edu.udc.bank.AcctInterface;
 import edu.udc.bank.BankAcctInterface;
 import edu.udc.dbobbj.BankServer;
-import edu.udc.dbobbj.DefaultBankAcct;
 
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -17,7 +15,7 @@ import javax.swing.table.TableRowSorter;
 
 /**
  * Main Class.
- * Contains the core of the GUI and the main method.
+ * Contains the core of the GUI and the main() method.
  *
  * @author Michael Kennedy and Melaku Bogale
  */
@@ -52,6 +50,7 @@ public class BankAcctsGuiDB extends JFrame {
                 UnsupportedLookAndFeelException ex) {
             System.err.println(ex);
         }
+
         initData();
         initComponents();
         initControls();
