@@ -84,6 +84,10 @@ public class DefaultBankAcct implements BankAcctInterface {
         return acctHolder;
     }
 
+    public void setAcctHolder(String acctHolder) {
+        this.acctHolder = acctHolder;
+    }
+
     @Override
     public Depositor getDepositor() {
         return depositor;

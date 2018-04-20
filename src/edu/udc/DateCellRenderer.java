@@ -14,11 +14,9 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class DateCellRenderer extends DefaultTableCellRenderer {
     DateFormat format;
-    Border padding;
 
     public DateCellRenderer(int horizontalPadding) {
         super();
-        padding = BorderFactory.createEmptyBorder(0, horizontalPadding, 0, horizontalPadding);
     }
 
     @Override
@@ -34,8 +32,6 @@ public class DateCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                    boolean hasFocus, int row, int column) {
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-        setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
 
         return this;
     }

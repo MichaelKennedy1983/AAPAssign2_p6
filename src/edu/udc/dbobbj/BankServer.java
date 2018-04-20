@@ -21,10 +21,18 @@ public class BankServer {
     private Connection connection = null;
     private static BankServer instance;
 
+    // Queries and Statements
     private String acctQuery = "SELECT ba_id, ba_holder, ba_value, ba_type, ba_dtopen, ba_special_info," +
             " dp_id, dp_addr, dp_postal_code" +
             " FROM bankacct" +
-            " LEFT JOIN depositor ON ba_id = dp_ba_id";
+            " INNER JOIN depositor ON ba_id = dp_ba_id" +
+            " ORDER BY ba_value DESC";
+
+    private String deleteBankAcct = "DELETE FROM bankacct WHERE ba_id = ?";
+    private String deleteDepositor = "DELETE FROM depositor WHERE dp_ba_id = ?";
+    private String deletePhones = "DELETE FROM phones WHERE ph_depo_key = ?";
+
+    private String updateHolder = "UPDATE bankacct SET ba_holder = ? WHERE ba_id = ?";
 
     private BankServer() {
 
@@ -52,8 +60,8 @@ public class BankServer {
 
             connection = DriverManager.getConnection(dbFullUrl);
             connection.setAutoCommit(false);
-        } catch (SQLException sexc) {
-            System.err.println(sexc);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -63,8 +71,8 @@ public class BankServer {
                 connection.rollback();
                 connection.close();
             }
-        } catch (SQLException sexc) {
-            System.err.println(sexc);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -73,8 +81,18 @@ public class BankServer {
             if (connection != null) {
                 connection.commit();
             }
-        } catch (SQLException sexc) {
-            System.err.println(sexc);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rollback() {
+        try {
+            if (connection != null) {
+                connection.rollback();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -83,6 +101,10 @@ public class BankServer {
         ResultSet rs = null;
 
         ArrayList<BankAcctInterface> accounts = new ArrayList<>();
+
+        if (connection == null) {
+            return accounts; //TODO: handle this better
+        }
 
         try {
             st = connection.createStatement();
@@ -108,12 +130,51 @@ public class BankServer {
 
                 accounts.add(bankAcct);
             }
+
+            st.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-
         return accounts;
+    }
+
+    public int removeAcct(BankAcctInterface ba)
+        throws SQLException {
+        PreparedStatement ps = null;
+        int rows = 0;
+
+        ps = connection.prepareStatement(deleteBankAcct);
+        ps.setInt(1, Integer.parseInt(ba.getUniqueID()));
+        rows += ps.executeUpdate();
+
+        ps = connection.prepareStatement(deleteDepositor);
+        ps.setInt(1, Integer.parseInt(ba.getUniqueID()));
+        rows += ps.executeUpdate();
+
+        ps = connection.prepareStatement(deletePhones);
+        ps.setInt(1, Integer.parseInt(ba.getDepositor().getPersonID()));
+        rows += ps.executeUpdate();
+
+        ps.close();
+
+        return rows;
+    }
+
+    public int updateAcct(BankAcctInterface ba, String newHolderName)
+            throws SQLException{
+        PreparedStatement ps = null;
+
+        ps = connection.prepareStatement(updateHolder);
+        ps.setString(1, newHolderName);
+        ps.setInt(2, Integer.parseInt(ba.getUniqueID()));
+
+        ((DefaultBankAcct)ba).setAcctHolder(newHolderName);
+
+        int rows = ps.executeUpdate();
+
+        return rows;
     }
 
     public ArrayList<BankAcctInterface> getSampleAcct() {

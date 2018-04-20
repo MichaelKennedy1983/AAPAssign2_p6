@@ -17,12 +17,10 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class CurrencyCellRenderer extends DefaultTableCellRenderer {
     private NumberFormat format;
-    private Border padding;
 
-    public CurrencyCellRenderer(int horizontalPadding) {
+    public CurrencyCellRenderer() {
         super();
         setHorizontalAlignment(RIGHT);
-        padding = BorderFactory.createEmptyBorder(0, horizontalPadding, 0, horizontalPadding);
     }
 
     @Override
@@ -103,7 +101,6 @@ public class CurrencyCellRenderer extends DefaultTableCellRenderer {
         } else {
             setBorder(UIManager.getBorder("Table.cellNoFocusBorder"));
         }
-        setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
 
         setValue(value);
 
