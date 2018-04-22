@@ -10,12 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * Gets the data from the database to the program.
  *
- * @author mkenn
+ * @author Michael Kennedy and
  */
 public class BankServer {
     private Connection connection = null;
@@ -142,6 +141,10 @@ public class BankServer {
 
     public int removeAcct(BankAcctInterface ba)
         throws SQLException {
+        if (connection == null) {
+            throw new SQLException();
+        }
+
         PreparedStatement ps = null;
         int rows = 0;
 
@@ -164,6 +167,10 @@ public class BankServer {
 
     public int updateAcct(BankAcctInterface ba, String newHolderName)
             throws SQLException{
+        if (connection == null) {
+            throw new SQLException();
+        }
+
         PreparedStatement ps = null;
 
         ps = connection.prepareStatement(updateHolder);

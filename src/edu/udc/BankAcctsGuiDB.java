@@ -162,7 +162,7 @@ public class BankAcctsGuiDB extends JFrame {
             JOptionPane.showMessageDialog(this, deletedRows + " rows deleted from database.");
         } catch (SQLException e) {
             bankServer.rollback();
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            JOptionPane.showMessageDialog(this, e);
         }
 
         refresh();
@@ -181,9 +181,11 @@ public class BankAcctsGuiDB extends JFrame {
             int rowsUpdated = bankServer.updateAcct(acct, newHolderName);
             bankServer.commit();
             atmAccountsTable.fireTableCellUpdated(row, 2);
+
+            JOptionPane.showMessageDialog(this, rowsUpdated + " rows updated in database.");
         } catch (SQLException e) {
             bankServer.rollback();
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e);
         }
     }
 
